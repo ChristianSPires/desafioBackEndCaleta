@@ -1,11 +1,10 @@
 #Caleta's Challenge
 
-
 [ ]
 
 #### GET /balance
 
-Este endpoint será utilizado para consultar o saldo da carteira digital de um jogador. Ele deverá receber como parâmetro na URL o ID do jogador (por exemplo, `player=1`).
+Este endpoint será utilizado para consultar o saldo da carteira digital de um jogador. Ele deverá receber como parâmetro na URL o ID do jogador.
 
 [ ]
 #### POST /bet
