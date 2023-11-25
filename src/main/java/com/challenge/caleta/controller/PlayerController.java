@@ -3,6 +3,7 @@ package com.challenge.caleta.controller;
 import com.challenge.caleta.model.Player;
 import com.challenge.caleta.model.Transaction;
 import com.challenge.caleta.service.PlayerService;
+import com.challenge.caleta.service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +16,17 @@ import java.util.Map;
 public class PlayerController {
 
     private final PlayerService playerService;
+    private final TransactionService transactionService;
 
-    public PlayerController(PlayerService playerService) {
+    public enum TransactionType {
+        BET,
+        WIN,
+        ROLLBACK
+    }
+
+    public PlayerController(PlayerService playerService, TransactionService transactionService) {
         this.playerService = playerService;
+        this.transactionService = transactionService;
     }
 
     @GetMapping("/balance/{id}")
@@ -34,7 +43,7 @@ public class PlayerController {
     }
 
     @PostMapping("/bet")
-    public ResponseEntity<Map<String, Object>> placeBet(@RequestBody TransactionRequest request) {
+    public ResponseEntity<Map<String, Object>> bet(@RequestBody TransactionRequest request) {
         Player player = playerService.findById(request.getPlayerId());
 
         if (player == null) {
@@ -47,16 +56,18 @@ public class PlayerController {
         if (currentBalance < betAmount) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-
         player.setBalance(currentBalance - betAmount);
         playerService.save(player);
 
-        Transaction transaction = new Transaction(request.getPlayerId(), "BET", betAmount);
-        playerService.saveTransaction(transaction);
+
+        Transaction transaction = new Transaction(player.getId(), betAmount, TransactionType.BET);
+
+        transactionService.save(transaction);
 
         Map<String, Object> response = new HashMap<>();
         response.put("balance", player.getBalance());
-        response.put("transactionId", transaction.getId());
+        response.put("transactionId", transaction.getTxn());
+
         return ResponseEntity.ok(response);
     }
 
@@ -73,12 +84,12 @@ public class PlayerController {
         player.setBalance(player.getBalance() + winAmount);
         playerService.save(player);
 
-        Transaction transaction = new Transaction(request.getPlayerId(), "WIN", winAmount);
+        Transaction transaction = new Transaction(player.getId(), winAmount, TransactionType.WIN);
         playerService.saveTransaction(transaction);
 
         Map<String, Object> response = new HashMap<>();
         response.put("balance", player.getBalance());
-        response.put("transactionId", transaction.getId());
+        response.put("transactionId", transaction.getTxn());
         return ResponseEntity.ok(response);
     }
 

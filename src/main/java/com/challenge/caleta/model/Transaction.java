@@ -1,9 +1,7 @@
 package com.challenge.caleta.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.challenge.caleta.controller.PlayerController;
+import jakarta.persistence.*;
 
 @Entity
 public class Transaction {
@@ -16,12 +14,28 @@ public class Transaction {
 
     private double value;
 
+    private boolean active;
+
+    @ManyToOne
+    @JoinColumn(name = "player_id")
+    private Player player;
+
     public Transaction() {
+    }
+
+    public Transaction(Player player, double amount, PlayerController.TransactionType type) {
+        this.player = player;
     }
 
     public Transaction(Integer txn, double value) {
         this.txn = txn;
         this.value = value;
+    }
+
+    public Transaction(Long id, double betAmount, PlayerController.TransactionType transactionType) {
+    }
+
+    public Transaction(Long playerId, String win, double winAmount) {
     }
 
     public Integer getTxn() {
@@ -38,6 +52,14 @@ public class Transaction {
 
     public void setValue(double value) {
         this.value = value;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override
