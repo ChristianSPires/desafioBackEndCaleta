@@ -24,17 +24,12 @@ public class PlayerService {
         return playerRepository.findById(id).orElse(null);
     }
 
+    public List<Player> getAllPlayers() {
+        return playerRepository.findAll();
+    }
+
     public void save (Player player) {
         playerRepository.save(player);
-    }
-
-    public List<Transaction> findByPlayerId(Long playerId) {
-        return transactionRepository.findByPlayerId(playerId);
-    }
-
-    public void rollback (Transaction transaction){
-        transaction.setActive(false);
-        transactionRepository.save(transaction);
     }
 
     public void saveTransaction(Transaction transaction) {
@@ -45,8 +40,6 @@ public class PlayerService {
         Player player = playerRepository.findById(playerId).orElse(null);
 
         if (player != null) {
-            // Rollback logic here, depending on your requirements
-            // For example, you might want to add the transaction amount back to the player's balance
             player.setBalance(player.getBalance() + transactionAmount);
             playerRepository.save(player);
         }

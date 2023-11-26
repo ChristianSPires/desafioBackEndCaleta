@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -28,6 +30,21 @@ public class PlayerController {
         this.playerService = playerService;
         this.transactionService = transactionService;
     }
+    @GetMapping("/balance")
+    public ResponseEntity<List<Map<String, Object>>> getAllBalances() {
+        List<Player> players = playerService.getAllPlayers();
+
+        List<Map<String, Object>> balances = new ArrayList<>();
+
+        for (Player player : players) {
+            Map<String, Object> playerBalance = new HashMap<>();
+            playerBalance.put("id", player.getId());
+            playerBalance.put("balance", player.getBalance());
+            balances.add(playerBalance);
+        }
+
+        return ResponseEntity.ok(balances);
+    }
 
     @GetMapping("/balance/{id}")
     public ResponseEntity<Map<String, Object>> getBalance(@PathVariable Long id) {
@@ -41,6 +58,7 @@ public class PlayerController {
         response.put("balance", player.getBalance());
         return ResponseEntity.ok(response);
     }
+
 
     @PostMapping("/bet")
     public ResponseEntity<Map<String, Object>> bet(@RequestBody TransactionRequest request) {
