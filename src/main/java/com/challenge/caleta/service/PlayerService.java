@@ -36,11 +36,11 @@ public class PlayerService {
         transactionRepository.save(transaction);
     }
 
-    public void rollbackTransaction(Long playerId, Long transactionId, double transactionAmount) {
+    public void rollbackTransaction(Long playerId, double transactionValue) {
         Player player = playerRepository.findById(playerId).orElse(null);
 
         if (player != null) {
-            player.setBalance(player.getBalance() + transactionAmount);
+            player.setBalance(player.getBalance() + transactionValue);
             playerRepository.save(player);
         }
     }

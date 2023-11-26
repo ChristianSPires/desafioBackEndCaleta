@@ -55,6 +55,7 @@ public class PlayerController {
         }
 
         Map<String, Object> response = new HashMap<>();
+        response.put("player", id);
         response.put("balance", player.getBalance());
         return ResponseEntity.ok(response);
     }
@@ -68,7 +69,7 @@ public class PlayerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        double betAmount = request.getAmount();
+        double betAmount = request.getValue();
         double currentBalance = player.getBalance();
 
         if (currentBalance < betAmount) {
@@ -83,8 +84,9 @@ public class PlayerController {
         transactionService.save(transaction);
 
         Map<String, Object> response = new HashMap<>();
+        response.put("player", player.getId());
         response.put("balance", player.getBalance());
-        response.put("transactionId", transaction.getTxn());
+        response.put("txn", transaction.getTxn());
 
         return ResponseEntity.ok(response);
     }
@@ -97,7 +99,7 @@ public class PlayerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
-        double winAmount = request.getAmount();
+        double winAmount = request.getValue();
 
         player.setBalance(player.getBalance() + winAmount);
         playerService.save(player);
@@ -114,14 +116,14 @@ public class PlayerController {
     @PostMapping("/rollback")
     public ResponseEntity<Void> rollback(@RequestBody RollbackRequest request) {
 
-        playerService.rollbackTransaction(request.getPlayerId(), request.getTransactionId(), request.getTransactionAmount());
+        playerService.rollbackTransaction(request.getPlayerId(), request.getTransactionAmount());
 
         return ResponseEntity.ok().build();
     }
 
     private static class TransactionRequest {
         private Long playerId;
-        private double amount;
+        private double value;
 
 
         public Long getPlayerId() {
@@ -132,12 +134,12 @@ public class PlayerController {
             this.playerId = playerId;
         }
 
-        public double getAmount() {
-            return amount;
+        public double getValue() {
+            return value;
         }
 
-        public void setAmount(double amount) {
-            this.amount = amount;
+        public void setValue(double value) {
+            this.value = value;
         }
     }
 

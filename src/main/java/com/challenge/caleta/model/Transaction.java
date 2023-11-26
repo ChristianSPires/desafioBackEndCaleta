@@ -23,7 +23,7 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(Player player, double amount, PlayerController.TransactionType type) {
+    public Transaction(Player player, double value, PlayerController.TransactionType type) {
         this.player = player;
     }
 
@@ -32,10 +32,10 @@ public class Transaction {
         this.value = value;
     }
 
-    public Transaction(Long id, double betAmount, PlayerController.TransactionType transactionType) {
+    public Transaction(Long id, double betValue, PlayerController.TransactionType transactionType) {
     }
 
-    public Transaction(Long playerId, String win, double winAmount) {
+    public Transaction(Long playerId, String win, double winValue) {
     }
 
     public Integer getTxn() {
