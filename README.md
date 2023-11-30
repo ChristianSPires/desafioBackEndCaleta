@@ -6,13 +6,35 @@ This Java application with Spring Boot and MariaDB implements a digital wallet s
 
 ## Installation
 
-1. **Install dependencies:**
+1. **Setup application.properties:**
 
+    Create a `application.properties` file on the project with the following content:
+
+    ```plaintext
+    # Database Configuration
+    spring.datasource.url=jdbc:mariadb://localhost:3306/digital_wallet
+    spring.datasource.username=your_database_username
+    spring.datasource.password=your_database_password
+    spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
     
-
-2. **Set up the environment variables:**
-
+    # Hibernate Configuration
+    spring.jpa.properties.hibernate.format_sql=true
+    spring.jpa.hibernate.ddl-auto=create
     
+    # Server Configuration
+    server.error.include-message=always
+    ```
+
+1. **Set up the MariaDB database and run the application:**
+    
+    - Ensure MariaDB is installed and running.
+    - Create a database named `digital_wallet`.
+    - Run the application.
+    - Populate the tables:
+
+    ```plaintext
+    INSERT INTO player_entity (balance) VALUES (1000.00);
+    ```
 
 The application will be running on [http://localhost:8080/player](http://localhost:8080/player).
 
