@@ -1,38 +1,111 @@
-#Caleta's Challenge
+# Caleta's application
 
-[ ]
+## Overview
 
-#### GET /balance
+This Java application with Spring Boot and MariaDB implements a digital wallet system with endpoints for transaction rollback, balance retrieval, placing bets, and winning prizes.
 
-Este endpoint será utilizado para consultar o saldo da carteira digital de um jogador. Ele deverá receber como parâmetro na URL o ID do jogador.
+## Installation
 
-[ ]
-#### POST /bet
+1. **Install dependencies:**
 
-Este endpoint será utilizado para realizar apostas usando a carteira digital de um jogador. Ele deverá receber no corpo da requisição um objeto JSON contendo o ID do jogador e o valor a ser sacado. Como resposta, deverá retornar o saldo atualizado da carteira digital e o ID da transação.
+    
 
-[ ]
-#### POST /win
+2. **Set up the environment variables:**
 
-Este endpoint será utilizado para realizar ganhos usando a carteira digital de um jogador. Ele deverá receber no corpo da requisição um objeto JSON contendo o ID do jogador e o valor a ser depositado. Como resposta, deverá retornar o saldo atualizado da carteira digital e o ID da transação.
+    
 
----
+The application will be running on [http://localhost:8080/player](http://localhost:8080/player).
 
-A Adição do endpoint a seguir contabilizará como um extra, a implementação correta dele contará como um diferencial:
+## Endpoints
 
+### 1. Rollback Transaction
 
-[ ]
-#### POST /rollback
+- **Endpoint:** `POST /rollback`
+- **Description:** Cancel a previous bet transaction and return the amount to the digital wallet.
+- **Request Example:**
 
-Este endpoint será utilizado para cancelar transações de apostas (BET) realizadas anteriormente. Ele deverá receber no corpo da requisição um objeto JSON contendo o ID do jogador, o ID da transação e o valor da transação. Se a transação existir no banco de dados, o valor sacado deverá ser retornado à carteira digital do jogador.
+    ```json
+    {
+      "player": 1,
+      "txn": 3,
+      "value": 10
+    }
+    ```
 
----
+- **Response Example:**
 
-- Organização do código; [ ]
-- Tratamento de erros; [ ]
-- Persistência dos dados. [ ]
-- Uso do Docker; [ ]
-- Implementação de testes automatizados; [ ]
-- Documentação da API. [ ]
+    ```json
+    {
+      "code": "OK",
+      "balance": 1995
+    }
+    ```
 
----
+### 2. Get Wallet Balance
+
+- **Endpoint:** `GET /balance/:player`
+- **Description:** Retrieve the balance of the digital wallet for a specific player.
+- **Request Example:**
+
+    ```http
+    GET /balance/1
+    ```
+
+- **Response Example:**
+
+    ```json
+    {
+      "player": 1,
+      "balance": 1000
+    }
+    ```
+
+### 3. Place Bet
+
+- **Endpoint:** `POST /bet`
+- **Description:** Place a bet using the digital wallet of a player.
+- **Request Example:**
+
+    ```json
+    {
+      "player": 1,
+      "value": 5
+    }
+    ```
+
+- **Response Example:**
+
+    ```json
+    {
+      "player": 1,
+      "balance": 995,
+      "txn": 1
+    }
+    ```
+
+### 4. Win Prize
+
+- **Endpoint:** `POST /win`
+- **Description:** Win a prize using the digital wallet of a player.
+- **Request Example:**
+
+    ```json
+    {
+      "player": 1,
+      "value": 1000
+    }
+    ```
+
+- **Response Example:**
+
+    ```json
+    {
+      "player": 1,
+      "balance": 1995,
+      "txn": 2
+    }
+    ```
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
