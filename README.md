@@ -1,5 +1,3 @@
-# Caleta's application
-
 ## Overview
 
 This Java application with Spring Boot and MariaDB implements a digital wallet system with endpoints for transaction rollback, balance retrieval, placing bets, and winning prizes.
